@@ -1,138 +1,157 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include<iostream>//otvechaet za potokovyi vvod i vyvod
+#include<fstream>//fyalovyi vvod i vyvod
+#include<string>//rabota so strokami
+//#include<STL>//chablony dlya raznyx struktur dannyx, rabotaychix s etimi dannymi
+#include<algorithm>//sortyrovka i td
 
+/* eche mojno dobavlyat starye faily 
 
-typedef struct my_strucy1{
-	string text;
-	my_strucy1* left, right;
-}tree_el;
+V ci stdio.h
+C ci++ cstdio	*/
 
+#include<cmath>
 
-void info();
-tree_el* zapolnenye();
-tree_el* dobav_el();
-void chitat_elementy(tree_el* current, int* n);
-void viz(root, int n);
-void print_tree(tree_element* root);
+/**********************************************/
+/* scoro sdacha */
+/*pechat dereva cherez dot
+ qut*/
 
-/*Funksia naxodit adress elementa po nomery lista sprava*/
-tree_el* nomer_v_obxode(root, rechen);
+class tree{
+	public:
+		/*v classax tolko te, kto yje v sozdannom dereve*/
+		std::string s;
+		tree* da_right;
+		tree* net_left;
+		
+		
+		//tree dobav(tree* temp, tree* sa, int flag);
+		
+	private:
+		
+		
+};
+tree* game(tree* head);//vozvrachaet na chem conchili
+tree* create_basic_tree();
+void otchistka(tree* head);
+tree* create_new_element();
+void raspechatka(tree* head);
+/*********************************************/
+
 
 int main(){
-	info();
-	tree_el* root = zapolnenye();
-
-
+	//info();
+	std::cout<<"0 -- da"<<"1 -- net"<<std::endl;
+	tree* head = create_basic_tree();
+	puts("m1");
+	tree* temp = game(head);
+	
+	raspechatka(head);
+	otchistka(head);
 	return 0;
 }
 
-
-/*************************************************/
-tree_el* zapolnenye(){
-	tree_el* root = dobav_el();
-	printf("Vvedite nomer, znachenie kornevogo elementa\n");
-	scanf("%s\n", root->value);
-	while(1){
-	printf("Vvodite nomer lista sprava, kotorui xochete ydlinit\n");
-	printf("Vvedite "0", esli xotite zavechit process\n");
-	print_tree(root);
-	int rechen = 0;
-	scanf("%d", &rechen);
-
-	if(rechen <= 0){
-		break;}
-
-	else{
-	tree_el* des = NULL;
-	des = nomer_v_obxode(root, rechen);//yznayot kakoy element zadymal polzovatel i vosvrachaet ego adress
-	print("Vvedite dsnnyi elementa sleva\n");
-	tree_el* newL = NULL;
-	newL = dobav_el();
-	scanf("%s\n", newL->value);
-	print("Vvedite dsnnyi elementa sprava\n");
-	tree_el* newR = NULL;
-	newR = dobav_el();
-	scanf("%s\n", newR->value);
-	des->left = newL;
-	des->right = newR;
-	}
-	}
-	return root;
-}
-
-tree_el* nomer_v_obxode(root, rechen){
-	/*polyschili koren i nomer, lista, nayti adress lista
-	chtoby ne zamorachivatca s vozvratom v rekursii, primenit adresnye sposoby*/
-	int kol_el = 0;
-	chitat_elementy(root, &kol_el);
-
-	int kol_yrov = 1;
-	int kol_list = kol_el - 1;
-	while(1){
-		kol_list -= pow(2,kol_yrov);
-		if(kol_list == 0){break;}
-		kol_yrov++;}
-	/*rasschitaem koichestvo listev*/
-	kol_list = kol_yrov;
-	for(int i = 0; i < kol_yrov; ++i){
-		kol_list -= pow(2, i);
-	}
-	/*ostalos yznat adress lista s nujnym nomerom */
-
-}
-
-/****************************************************************/
-void print_tree(tree_element* root){/*v postfiksnoy forme*/
-	int kol_el = 0;
-	chitat_elementy(root, &kol_el);
-
-	int kol_yrov = 1;
-	temp1 = kol_el - 1;
-	while(1){
-		temp1 -= pow(2,kol_yrov);
-		if(temp1 == 0){break;}
-		kol_yrov++;}
-
-	temp1 = kol_yrov;
-	for(int i = 1; i <= temp1; ++i){
-		int p = 0;
-		viz(root, i, p);
-		puts("");
+void otchistka(tree* head){
+	if(head){
+		otchistka(head->da_right);
+		otchistka(head->net_left);
+		free(head);
 	}
 }
 
-void viz(current, n, p){
-	if ((n != p) && (current != NULL)){
-		 n++;
-	   viz(current->left, n+1, p);
-	   viz(current->right, n+1, p);
+tree* game(tree* head){
+	tree* temp = head;
+	int n;
+	
+	while((temp->da_right)&&(temp->net_left)){
+		std::cout<<temp->s<<std::endl;
+		std::cin>>n;
+		if(n > 0){temp = temp->da_right;}
+		else{temp = temp->net_left;}}
+	
+	std::cout<<"Eto: "<<temp->s<<"!"<<std::endl;
+	std::cout<<"Ya ygadal?"<<"\n"<<"0 -- NET	1 -- DA"<<std::endl;
+	if(n <= 1){
+		/*n = 0;
+		tree* sa = temp;
+		tree* prev = NULL;
+		n = 0;
+		dobav(head, &sa, &n, &prev);
+		/*teper v sa prev elem*/
+		std::cout<<"Kogo Vy xoteli?"<<std::endl;
+		tree* new1 =  create_new_element();
+		std::cin>>new1->s;
+		tree* new2 =  create_new_element();
+		new2->s = temp->s;
+		std::cout<<"V chem raslichie?"<<std::endl;
+		std::cin>>temp->s;
+		std::cout<<"Y novogo chlena eto est?\n da -- 0	net -- 1"<<std::endl;
+		std::cin>>n;
+		temp->s = "Eto" + temp->s + "?";
+		if(n == 0){
+			temp->da_right = new1;
+			temp->net_left = new2;
+		}
+		else{
+			temp->da_right = new2;
+			temp->net_left = new1;
+		}
+		
 	}
-	if(n == i){
-		printf("%s	", current->value);
+
+}
+
+/*yznaet predydych elem
+tree dobav(tree* temp, tree* sa, int flag, tree* prev){
+	/*poisk adresa elementa, vyzov doav 1 s voprosami
+	tree* prev = temp;
+	if(temp){
+		dobav(temp->net_left, *sa, *flag, *prev);
+		dobav(temp->da_right, *sa, *flag, *prev);
+		if(temp == *sa) && (*flag == 0)){
+			*flag = 1;
+			*sa = *prev;
+		}
 	}
+	
+}*/
+
+
+void raspechatka(tree* head){
+	if (head != NULL) { 
+    raspechatka(head->da_right);
+    raspechatka(head->net_left); 
+    std::cout << head->s; 
+  }
 }
 
-void chitat_elementy(tree_element* current, int* adr){
-	if (current != NULL)	{
-	   chitat_elementy(current->left, adr);
-	   chitat_elementy(current->right, adr);
-	   (*adr)++;}
+/***********************************************/
+
+tree* create_basic_tree(){
+	tree*  head = create_new_element();
+	puts("cbt1");
+	head->s = "Eto jivoe?";
+	head->da_right = create_new_element();
+	puts("cbt2");
+	head->net_left = create_new_element();
+	puts("cbt3");
+	head->da_right->s = "Putin";
+	head->net_left->s = "Vodka";
+	puts("cbt4");
+	return head;}
+
+tree* create_new_element(){
+	puts("cne1");
+	tree* temp = (tree*)malloc(sizeof(tree));
+	puts("cne2");
+	temp->s = "Vsavte vach text suda";
+	temp->da_right = NULL;
+	temp->net_left = NULL;
+	puts("		");
+	std::cout<<temp<<std::endl;
+	return temp;
 }
-/***************************************/
-
-
-tree_el* new = dobav_el(){
-	tree_el* elem = (elem*)malloc(sizeof(tree_el));
-	elem->left = NULL;
-	elem->right = NULL;
-	elem->value = printf("Vvedite text.");
-	return elem;
-}
-
+			
+/*			
 void info(){
-	printf("Dobro pojalovat!\n");
-	printf("Vam neobxodimo zagadat jivotnoye\n")
-	printf("A my popytaemsya otgadat ego.\n");
-	puts("No snachala Vam nyjno bydet zapolnit akinatora");
-}
+	std::cout<<0 -- da<<1 -- net<<std::endl;
+}*/
